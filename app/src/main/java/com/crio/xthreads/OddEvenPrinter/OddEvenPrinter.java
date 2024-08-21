@@ -19,10 +19,10 @@ public class OddEvenPrinter {
      */
      public void printOdd() {
          for (int i = 1; i <= limit; i += 2) {
-             System.out.println(Thread.currentThread().getName() + " printed: " + i);  Print odd number with thread name
+             System.out.println(Thread.currentThread().getName() + " printed: " + i);
 
              try {
-                 Thread.sleep(500);  Add delay to simulate processing
+                 Thread.sleep(500);
              } catch (InterruptedException e) {
                  Thread.currentThread().interrupt();
              }
@@ -40,10 +40,10 @@ public class OddEvenPrinter {
      */
      public void printEven() {
          for (int i = 2; i <= limit; i += 2) {
-             System.out.println(Thread.currentThread().getName() + " printed: " + i);  Print even number with thread name
+             System.out.println(Thread.currentThread().getName() + " printed: " + i);
 
              try {
-                 Thread.sleep(500);  Add delay to simulate processing
+                 Thread.sleep(500);
              } catch (InterruptedException e) {
                  Thread.currentThread().interrupt();
              }

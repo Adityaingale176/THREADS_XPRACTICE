@@ -62,13 +62,9 @@ public class App {
             - If tasks are still running after the timeout, force shutdown using `shutdownNow()`.
             - Ensure that the shutdown process is robust by handling `InterruptedException`.
         */
-          Sequentially process each trade
          for (Trade trade : trades) {
              try {
-                  Calculate returns for each trade
                  ReturnSummary result = calculator.calculateReturns(trade.getSymbol(), trade.getPurchaseDate(), endDate);
-
-                  Print the result
                  System.out.printf("Symbol: %s | Total Return: %.2f%% | Annualized Return: %.2f%%\n",
                          result.getSymbol(), result.getTotalReturn(), result.getAnnualizedReturn());
 

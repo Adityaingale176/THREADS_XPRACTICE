@@ -1,0 +1,22 @@
+# CRIO_SOLUTION_START_MODULE_EXERCISES
+# CRIO_SOLUTION_END_MODULE_EXERCISES
+[
+    {
+      "symbol": "AAPL",
+      "quantity": 100,
+      "tradeType": "BUY",
+      "purchaseDate": "2019-01-02"
+    },
+    {
+      "symbol": "MSFT",
+      "quantity": 10,
+      "tradeType": "BUY",
+      "purchaseDate": "2019-01-02"
+    },
+    {
+      "symbol": "GOOGL",
+      "quantity": 50,
+      "tradeType": "BUY",
+      "purchaseDate": "2019-01-02"
+    }
+]

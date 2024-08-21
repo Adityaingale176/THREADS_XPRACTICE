@@ -1,4 +1,4 @@
-package com.crio.xthreads.QMoney;
+package com.crio.xthreads.QMoney.trade;
 
 import java.time.LocalDate;
 

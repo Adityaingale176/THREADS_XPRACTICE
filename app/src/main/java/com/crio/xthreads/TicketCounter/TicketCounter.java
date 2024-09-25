@@ -23,7 +23,7 @@ public class TicketCounter {
       - Without synchronization, multiple threads can simultaneously read and modify the `availableTickets` variable, leading to incorrect results (e.g., overselling tickets).
       - Synchronization ensures that each thread completes its operation on the shared resource (`availableTickets`) before another thread can modify it.
     */
-     public boolean bookTicket(String customerName, int numberOfTickets) {
+     public synchronized boolean bookTicket(String customerName, int numberOfTickets) {
          if (availableTickets >= numberOfTickets) {
              System.out.println(customerName + " successfully booked " + numberOfTickets + " tickets.");
              availableTickets -= numberOfTickets;
@@ -34,7 +34,7 @@ public class TicketCounter {
          }
      }
 
-     public int getAvailableTickets() {
+     public synchronized int getAvailableTickets() {
          return availableTickets;
      }
 

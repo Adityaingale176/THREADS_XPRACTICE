@@ -3,7 +3,10 @@ package com.crio.xthreads.QMoney;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -11,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.crio.xthreads.QMoney.dto.ReturnSummary;
 import com.crio.xthreads.QMoney.stockdata.StockDataServiceType;
+import com.crio.xthreads.QMoney.trade.Trade;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -62,17 +66,36 @@ public class App {
             - If tasks are still running after the timeout, force shutdown using `shutdownNow()`.
             - Ensure that the shutdown process is robust by handling `InterruptedException`.
         */
-         for (Trade trade : trades) {
-             try {
-                 ReturnSummary result = calculator.calculateReturns(trade.getSymbol(), trade.getPurchaseDate(), endDate);
-                 System.out.printf("Symbol: %s | Total Return: %.2f%% | Annualized Return: %.2f%%\n",
-                         result.getSymbol(), result.getTotalReturn(), result.getAnnualizedReturn());
+        
+        int numberOfThreads = Runtime.getRuntime().availableProcessors();
+        // Create an ExecutorService for parallel processing
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
 
-             } catch (Exception e) {
-                 System.err.println("Error processing trade result: " + e.getMessage());
-             }
-         }
+        List<Future<ReturnSummary>> futures = new ArrayList<>();
+          // Submit tasks for parallel execution
+        for (Trade trade : trades){
 
+            Callable <ReturnSummary> task = () -> calculator.calculateReturns(trade.getSymbol(), trade.getPurchaseDate(), endDate);
+
+            Future<ReturnSummary> future = executorService.submit(task);
+
+            futures.add(future); 
+        }
+        // Collect results using Future
+        List <ReturnSummary> results = new ArrayList<>();
+
+        for (Future <ReturnSummary> future : futures){
+            try{
+                results.add(future.get());
+            }
+            catch (InterruptedException | ExecutionException e){
+                e.printStackTrace();
+                results.add(new ReturnSummary(null, 0,0)); // Default ReturnSummary on error
+            }
+        }
+        results.forEach(System.out::println);   // Print the results
+
+        executorService.shutdown();  // Shutdown the ExecutorService
     }
 
     private static List<Trade> loadTradesFromFile(ObjectMapper objectMapper) {

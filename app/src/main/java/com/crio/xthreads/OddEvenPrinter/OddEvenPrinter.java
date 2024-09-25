@@ -4,6 +4,8 @@ public class OddEvenPrinter {
     private final int limit;
     private boolean isOdd = true;
 
+    private final Object lock = new Object();
+
     public OddEvenPrinter(int limit) {
         this.limit = limit;
     }
@@ -17,16 +19,24 @@ public class OddEvenPrinter {
      * - Update the `isOdd` flag to indicate that the next number to print should be even.
      * - Use `lock.notify()` to wake up the waiting thread (for even numbers).
      */
-     public void printOdd() {
-         for (int i = 1; i <= limit; i += 2) {
-             System.out.println(Thread.currentThread().getName() + " printed: " + i);
+     public void printOdd() throws InterruptedException{
+        synchronized(lock){
+                for (int i = 1; i <= limit; i += 2) {
+                    while(!isOdd){
+                        lock.wait();
+                    }
+                    System.out.println(Thread.currentThread().getName() + " printed: " + i);
 
-             try {
-                 Thread.sleep(500);
-             } catch (InterruptedException e) {
-                 Thread.currentThread().interrupt();
-             }
-         }
+                    isOdd = false;
+                    lock.notify();
+
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                }
+            }
+        }
      }
     
     /**
@@ -38,16 +48,24 @@ public class OddEvenPrinter {
      * - Update the `isOdd` flag to indicate that the next number to print should be odd.
      * - Use `lock.notify()` to wake up the waiting thread (for odd numbers).
      */
-     public void printEven() {
-         for (int i = 2; i <= limit; i += 2) {
-             System.out.println(Thread.currentThread().getName() + " printed: " + i);
+     public void printEven() throws InterruptedException{
+        synchronized(lock){ 
+            for (int i = 2; i <= limit; i += 2) {
+                while(isOdd){
+                    lock.wait();
+                }
+                System.out.println(Thread.currentThread().getName() + " printed: " + i);
 
-             try {
-                 Thread.sleep(500);
-             } catch (InterruptedException e) {
-                 Thread.currentThread().interrupt();
-             }
-         }
-     }
+                isOdd = true;
+                lock.notify();
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
 
 }

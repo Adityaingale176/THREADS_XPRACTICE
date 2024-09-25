@@ -42,5 +42,36 @@ public class App {
         // TODO: Output the total line count
         // 1. Print out the total number of lines counted across all files.
 
+        ExecutorService executorService = Executors.newFixedThreadPool(fileNames.size());
+
+        List<Future<Integer>> futures = new ArrayList<>();
+
+        for (String fileName : fileNames){
+
+            Callable<Integer> task = new FileLineCountTask(fileName);
+
+            Future<Integer> future  = executorService.submit(task);
+
+            futures.add(future);
+        }
+
+        int totalLineCount = 0 ;
+        for (Future<Integer> future : futures){
+            try {
+                totalLineCount += future.get();
+            }
+            catch(InterruptedException e){
+                e.printStackTrace();
+                
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        executorService.shutdown();
+
+        System.out.println("Total number of lines counted:" + totalLineCount);
+
     } 
+
 }

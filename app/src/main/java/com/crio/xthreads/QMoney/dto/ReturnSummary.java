@@ -22,4 +22,14 @@ public class ReturnSummary {
     public double getAnnualizedReturn() {
         return annualizedReturn;
     }
+
+    @Override
+    public String toString() {
+        String totalReturnPercentage = String.format("%.2f%%", totalReturn);
+        String annualizedReturnPercentage = String.format("%.2f%%", annualizedReturn);
+
+        return "symbol: " + symbol + "| Total Return: " + totalReturnPercentage + "| Annualized Return:" + annualizedReturnPercentage ;
+    }
+
+    
 }

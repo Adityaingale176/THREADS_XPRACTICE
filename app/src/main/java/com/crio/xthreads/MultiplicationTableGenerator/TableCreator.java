@@ -16,6 +16,14 @@ public class TableCreator implements Runnable{
     //    - Print the multiplication result in the format: "number times i is product".
     //      Example format: "5 times 3 is 15".
     @Override
-    public void run() {
+    public void run(){
+        numberMulitplier(number);
+    }
+
+    public void numberMulitplier(int number){
+        for (int i = 1; i<=10; i++){
+            int product = number * i;
+            System.out.println(number + " times " + i + " is " + product);
+        }
     }
 }

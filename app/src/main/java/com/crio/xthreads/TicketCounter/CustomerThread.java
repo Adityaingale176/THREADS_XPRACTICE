@@ -20,5 +20,8 @@ public class CustomerThread implements Runnable {
 
     @Override
     public void run() {
+        ticketCounter.bookTicket(customerName, numberOfTickets);
     }
+
+    
 }

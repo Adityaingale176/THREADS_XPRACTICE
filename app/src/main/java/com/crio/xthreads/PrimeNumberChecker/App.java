@@ -30,5 +30,31 @@ public class App {
         //    b. For each number, retrieve the result from the `PrimeChecker` instance.
         //    c. Print whether each number is prime or not based on the result from `isPrime()`.
 
+        //CREATE A THREAD FOR EACH NUMBER 
+        for (int number  : numbers){
+            PrimeChecker checker = new PrimeChecker(number);
+            Thread thread = new Thread(checker);
+            thread.start();
+            threads.add(thread);
+            checkers.add(checker);
+        }
+
+        for (Thread thread : threads){
+            try{
+                thread.join(); //to ensure the main thread waits for their completion.
+            }
+            catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+
+        for (PrimeChecker checker : checkers){
+            if (checker.isPrime()){
+                System.out.println("Number is Prime");
+            }
+            else
+                System.out.println("Number is not Prime");
+        }
+
     }
 }

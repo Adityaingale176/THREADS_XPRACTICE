@@ -12,8 +12,11 @@ class PrimeChecker implements Runnable {
     // TODO: Implement the run method to perform prime number checking
     // 1. Call the checkPrime method to determine if the number is prime.
     // 2. Store the result in the isPrime field.
+
+
     @Override
     public void run() {
+        isPrime = checkPrime(number);
     }
 
     // Method to check if a number is prime

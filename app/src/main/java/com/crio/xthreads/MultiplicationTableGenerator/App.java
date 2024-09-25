@@ -19,5 +19,17 @@ public class App {
         // 4. Wait for the current thread to finish before starting the next one:
         //    - Call `join()` on the thread to ensure the main thread waits until the current thread completes execution.
 
+        for (int i=1; i<=n; i++){
+            TableCreator tableCreator = new TableCreator(i);
+            Thread thread = new Thread(tableCreator);
+            thread.start();
+            try{
+                thread.join();
+            }
+            catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+
     }
 }
